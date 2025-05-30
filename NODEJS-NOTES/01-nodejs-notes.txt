@@ -1,0 +1,580 @@
+npm init
+
+create index.js
+
+console.log('my first node')
+console.log('my first node')
+console.log('my first node')
+console.log('my first node')
+console.log('my first node')
+console.log('my first node')
+console.log('my first node')
+
+function add(a,b){
+    console.log(a+b);
+    
+}
+
+add(5,10);
+add(5,25);
+add(10,10);
+add(15,10);
+add(50,10);
+
+const os = require('os');
+
+// console.log(os.cpus());
+console.log(os.freemem());
+console.log(os.arch());
+
+os.platform(), type(), arch(), cpus(), freemem(), totalmem(), hostname(), release(), userInfo()
+fs.readFile(), writeFile(), rename(), appendFile(), unlink()
+http
+path
+url 
+
+
+node index.js
+
+------
+
+fs
+
+synchronous 
+asynchronous 
+
+readFile(), writeFile(), rename(), appendFile(), unlink()
+
+synchronous - readFileSync(), writeFileSync(), renameSync(), appendFileSync(), unlinkSync()
+
+asynchronous - readFile(), writeFile(), rename(), appendFile(), unlink() - callback function / async or await
+
+
+------------
+
+CRUD on Files (multiple files)
+
+CRUD on File (single file on the data inside)
+
+-------------------------------------
+
+create a file synchronous process
+
+const fs = require('fs')
+
+console.log('before create a file');
+function createFileSync(){
+    fs.writeFileSync('./data/samaple1.txt', 'Hello world!!!');
+    console.log('file has been created!!!');
+    
+}
+createFileSync();
+console.log('after create a file');
+
+
+///////////////////////////////////////////
+
+
+// 99.9% most used this method
+
+console.log('before create a file');
+
+function createFile(){
+    fs.writeFile('./data/samaple2.txt', 'Hello world!!!',(err)=>{
+        if(err) console.log(err);
+        console.log('file has been created!!!');        
+    }); 
+}
+
+createFile();
+console.log('after create a file');
+
+
+------------------------------------
+
+
+
+
+const fs = require('fs');
+console.log('after create a file');
+
+function readAFile() {
+    
+        fs.readFile('./data/sample4.txt', 'utf8', (err,data)=>{
+            if(err) console.log(err);
+            
+            console.log('File has been read');
+            console.log(data);
+            
+        });
+    
+}
+
+readAFile();
+console.log('after create a file');
+
+
+-------------------------------------
+
+
+const fs = require('fs');
+console.log('after create a file');
+
+function readAFileSync() {
+    
+       let data =  fs.readFileSync('./data/sample3.txt', 'utf8')
+            
+            console.log('File has been read');
+            console.log(data);         
+      
+    
+}
+
+readAFileSync();
+console.log('after create a file');
+
+
+---------------------------------------
+
+const fs = require('fs');
+
+function appendAFileSync() {
+    
+       fs.appendFileSync('./data/sample3.txt', '\n new line added....')
+            
+            console.log('File has been appended');              
+      
+    
+}
+
+appendAFileSync();
+
+
+----------------------------------
+
+
+const fs = require('fs');
+
+function appendAFile() {
+    
+       fs.appendFile('./data/sample3.txt', '\n new line added....', (err)=>{
+        if(err) console.log(err);
+
+        console.log('File has been appended');              
+        
+       })
+            
+      
+    
+}
+
+appendAFile();
+
+---------------------------------
+
+const fs = require('fs');
+
+function appendAFileSync() {
+    
+       fs.appendFileSync('./data/sample5.txt', '\n new line added....')
+
+        console.log('File has been appended');                 
+    
+}
+
+appendAFileSync();
+
+-------------------------------
+
+
+const fs = require('fs');
+
+function deleteAFileSync() {
+    
+       fs.unlinkSync('./data/sample5.txt')
+
+        console.log('File has been deleted');                 
+    
+}
+
+deleteAFileSync();
+
+
+-----------------------------
+
+const fs = require('fs');
+
+function deleteAFile() {
+    
+       fs.unlink('./data/sample4.txt',(err)=>{
+        if(err) console.log(err);
+        
+        console.log('File has been deleted');                 
+       })
+
+    
+}
+
+deleteAFile();
+
+-----------------------------
+
+
+
+
+we can create this in two files
+
+
+file-module.js
+
+    create function here
+
+    module.exports = createFile
+
+    module.exports = {createFile, createFileSync,readAFile,readAFileSync, appendAFile, appendAFileSync, deleteAFile, deleteAFileSync}
+
+    
+
+filesystem.js or index.js
+
+    call the function here
+  
+    const { createFile, createFileSync,readAFile,readAFileSync, appendAFile, appendAFileSync, deleteAFile, deleteAFileSync } = require('./file-module')
+
+     const filemodules = require('./file-module')   ----- filemodules.createAFile();
+    
+   createAFile();
+
+
+
+
+==============================================
+==============================================
+
+
+fs for json files
+
+employees.json
+
+[
+    {
+        "name": "Ramasamy",
+        "email": "ramasamy@gmail.com",
+        "city": "Chennai"
+    },
+    {
+        "name": "Kumar",
+        "email": "Kumar@gmail.com",
+        "city": "Selam"
+    },
+    {
+        "name": "Balan",
+        "email": "balan@gmail.com",
+        "city": "Vellor"
+    },
+    {
+        "name": "Sakthi",
+        "email": "sakthi@gmail.com",
+        "city": "Gingee"
+    },
+    {
+        "name": "Rajan",
+        "email": "rajan@gmail.com",
+        "city": "Villupuram"
+    }
+]
+
+
+readAllEmployees,readAEmployee,addAEmployee,updateAEmployee,deleteAEmployee --- A - specific employee
+
+
+we have to include fs, employees.json
+
+const fs = require('fs')
+const employeesFile = './employees.json'
+
+employees.js
+
+const fs = require('fs')
+const employeesFile = './employees.json'
+
+// readAllEmployees
+
+function readAllEmployees(){
+    fs.readFile(employeesFile,'utf8', (err,data)=>{
+        if(err) console.log(err);
+        console.log(data);
+                
+    })
+}
+
+readAllEmployees();
+
+node employees.js
+
+-----------------------------------
+
+read A specific employee --- by name or by email
+
+
+// readAEmployee
+
+function readAEmployee(name){
+    fs.readFile(employeesFile,'utf8', (err,data)=>{
+        if(err) console.log(err);
+        console.log(typeof data);
+        let result = JSON.parse(data)
+        console.log(typeof result);
+                
+    })
+}
+
+readAEmployee("Ramasamy");
+
+------
+
+function readAEmployee(name){
+    fs.readFile(employeesFile,'utf8', (err,data)=>{
+        if(err) console.log(err);
+        // console.log(typeof data);
+        let result = JSON.parse(data)
+        // console.log(typeof result);
+
+        let output = result.filter(v=> v.name === name);
+        (output.length > 0) ? console.log(output) : console.log('No employees found!!!');       
+        
+        // console.log(output);       
+                
+    })
+}
+
+readAEmployee("Ramasamy");
+
+
+-----------------
+
+function readAEmployee(name, email){
+    fs.readFile(employeesFile,'utf8', (err,data)=>{
+        if(err) console.log(err);
+        // console.log(typeof data);
+        let result = JSON.parse(data)
+        // console.log(typeof result);
+
+        let output = result.filter(v=> v.name === name && v.email === email);
+        output.length > 0 ? console.log(output) : console.log('No employees found!!!');       
+        
+        // console.log(output);       
+                
+    })
+}
+
+readAEmployee("Ramasamy", "ramasamy@gmail.com");
+
+
+
+=======================================
+
+ADD
+
+
+function addAEmployee(...employee){
+    const employeeObject = {
+        "name": employee[0],
+        "email": employee[1],
+        "city": employee[2]
+    }
+   console.log(employeeObject);   
+}
+
+addAEmployee("Govindaraj", "govindaraj@gmail.com", "Thiruvannamalai");
+
+------
+
+
+function addAEmployee(...employee){
+    const employeeObject = {
+        "name": employee[0],
+        "email": employee[1],
+        "city": employee[2]
+    }
+//    console.log(employeeObject);   
+
+   fs.readFile(employeesFile, 'utf8', (err,data)=>{
+    if(err) console.log(err);
+     console.log(typeof data);
+    let result = JSON.parse(data);
+    let output = result.filter(v=> v.email === employeeObject.email);
+
+    (output.length > 0) ? console.log('Employee already exist') : result.push(employeeObject);
+    
+    // console.log(result);
+
+    fs.writeFile(employeesFile, JSON.stringify(result), (err)=>{
+        if(err) console.log(err);
+        console.log('employee has been added!!!');
+        
+        
+    })
+    
+    
+   })
+}
+
+addAEmployee("Govindaraj", "govindaraj@gmail.com", "Thiruvannamalai")
+
+
+========================================
+
+UPDATE
+
+
+function updateAEmployee(...employee){
+
+    const employeeObject = {
+        "name": employee[0],
+        "email": employee[1],
+        "city": employee[2]
+    }
+//    console.log(employeeObject);   
+
+   fs.readFile(employeesFile, 'utf8', (err,data)=>{
+    if(err) console.log(err);
+    let result = JSON.parse(data);
+    
+    let employeeData = result.map(v=>{
+        if(v.email === employeeObject.email){
+            let temp = {...v};
+            console.log(temp);
+            for(let temp1 in employeeObject){
+                temp[temp1] = employeeObject[temp1]
+                console.log(temp1);
+                
+            }
+            console.log(temp);
+            return temp;           
+            
+        }
+
+        return v;
+    });
+    console.log(employeeData);
+        
+    
+   })
+}
+
+updateAEmployee("RamasamyNew","ramasamy@gmail.com","Chennai")
+
+----------------------
+
+
+function updateAEmployee(...employee){
+
+    const employeeObject = {
+        "name": employee[0],
+        "email": employee[1],
+        "city": employee[2]
+    }
+//    console.log(employeeObject);   
+
+   fs.readFile(employeesFile, 'utf8', (err,data)=>{
+    if(err) console.log(err);
+   
+    let flag = false;
+
+    let result = JSON.parse(data);
+    
+    let employeeData = result.map(v=>{
+        if(v.email === employeeObject.email){
+            let temp = {...v};
+            console.log(temp);
+            for(let temp1 in employeeObject){
+                temp[temp1] = employeeObject[temp1]
+                console.log(temp1);
+                
+            }
+            console.log(temp);
+
+            flag = true;
+
+            return temp;           
+            
+        }
+        
+        return v;
+        
+    });
+    // console.log(employeeData);
+
+    if(flag){
+        fs.writeFile(employeesFile, JSON.stringify(employeeData),(err)=>{
+            if(err) console.log(err);
+            console.log('employee has been updated!!!');           
+            
+        })
+    } else{
+        console.log('unable to update');
+        
+    }       
+    
+   })
+}
+
+updateAEmployee("RamasamyNew","ramasamyaaa@gmail.com","Chennai")
+
+================================================
+
+
+function deleleAEmployee(email) {
+    fs.readFile(employeesFile, 'utf8', (err, data) => {
+        if(err) console.log(err);
+
+        let result = JSON.parse(data);
+        let output = result.filter(v => v.email !== email);
+        // console.log(output);
+        
+        if(output.length < result.length) {
+            fs.writeFile(employeesFile, JSON.stringify(output), (err) => {
+                if(err) console.log(err);
+                console.log("Employee has been deleted!");
+                                
+            });
+        } else {
+            console.log("Employee not found!");
+        }
+    });
+}
+deleleAEmployee("rajan@gmail.com");
+
+
+=================================================
+=================================================
+=================================================
+
+
+for server,
+
+  npm i express cors dotenv
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+

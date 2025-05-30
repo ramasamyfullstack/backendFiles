@@ -1,0 +1,202 @@
+MongoDB  - NoSQL
+
+first create connection
+second create database with collection
+third add data 
+
+we can import data
+
+
+
+name: "Gopi"
+email: "gopi@gmail.com"
+city: "Chennai"
+
+
+
+mongo vs RDBMS	
+
+database - database
+
+collections  - tables
+
+documents  -  row
+
+filed(key/value)  - columns
+
+
+download mongodb and install it
+
+create connection, collection and database.
+
+while mouse over, you can see options
+
+we can insert, copy, clone
+
+
+filter
+   {name: "Rajan"}    ---- find
+
+
+
+
+
+Mongo Shell:
+
+show dbs;
+
+use employeesDB
+
+use employeesnewDB  --- creates new database
+
+db.createCollection("students")
+
+db.employees.insertOne({"name": "Rajan","email": "rajan@gmail.com", "city": "Chennai", "age": 25, "date": new Date("01/01/2025")})
+
+db.employees.find()
+
+db.employees.find({"name": "Rajan"})
+
+shift + enter -- wrap
+
+db.employees.insertMany([{"name": "Rajan","email": "rajan@gmail.com", "city": "Chennai"},{"name": "Balrai","email": "balraj@gmail.com", "city": "Chennai"},{"name": "Kamal","email": "kamal@gmail.com", "city": "Chennai"}])
+
+db.employees.updateOne({"name": "Rajan"}, {$set: {"name": "RajanNew", "email": "rajannew@gmail.com"}})
+
+db.employees.updateMany({}, {$set: {"active": true}})
+
+db.employees.updateMany({}, {$set: {"age": 25}})
+
+db.employees.updateOne({"name": "Balaji"}, {$set: {"name": "Balaji", "email": "balaji@gmail.com"}}, {upsert: true} )
+
+db.employees.updateOne({"name": "Manoj"}, {$set: {"email": "balaji@gmail.com", "city": "selam"}}, {upsert: true} )
+
+db.employees.deleteOne({"name": "Manoj"})
+
+db.employees.deleteMany({})
+
+show collections
+
+db.employees.drop()
+
+db.dropDatabase()
+
+db.employees.find({"name":"Kamal","email":"kamal@gmail.com"})
+
+db.employees.find({"name":"Kamal","age":{$gt:30}})
+
+db.employees.find({$or: [{"name":"Kamal"},{"email":"vijay@gmail.com"}]})
+
+db.employees.find({$and: [{"name":"Kamal"},{"email":"vijay@gmail.com"}]})
+
+db.employees.find({"name": {$in: ["Kamal","Vijay","gopi"]}})
+
+db.employees.find({"name": {$in: ["Kamal","Vijay","Gopi"]}})  
+
+db.employees.find({$or: [{"name":"Kamal"},{"name":"Vijay"}]})
+
+db.employees.find({$or: [{"name":"Kamal"},{"age":{$gt:30}}]})
+
+db.employees.find({"age": {$lt:30}})
+
+db.employees.find({"age": {$gt:30}})
+
+db.employees.find({"age": {$eq:35}})
+
+db.employees.find({"age": {$ne:35}})
+
+db.employees.find({"age": {$gte:35}})
+
+db.employees.find({"age": {$lte:30}})
+
+
+Regular Expression:
+
+
+db.employees.find({"name": /kamal/i})   --- case in-sensitive
+
+db.employees.find({"name": /kamal/})
+
+db.employees.find({"name": /kamal/i})
+
+db.employees.find({"name": /Kamal/})
+
+db.employees.find({"name": /^kamal/i})
+
+db.employees.find({"name": /new$/i})
+
+db.employees.find({"name": /New$/})
+
+
+db.employees.find().limit(2)
+
+db.employees.find().skip(2).limit(2)
+
+db.employees.find().sort({"age": 1})                  // ascending order
+
+db.employees.find().sort({"age": -1})                  // decending order
+
+db.employees.find().sort({"name": 1})                  // ascending order
+
+db.employees.find().sort({"name": -1})                  // decending order
+
+db.employees.find().sort({"name": 1}).skip(0).limit(2)
+
+db.employees.find().sort({"name": 1}).skip(2).limit(2)
+
+
+INDEX
+
+db.employees.getIndexes()
+
+db.employees.find({"age":{$gt:30}}).explain("executionStats")
+
+db.employees.createIndex({"age": 1}, {"name": "ageIndex"})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

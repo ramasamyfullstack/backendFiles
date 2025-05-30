@@ -1,0 +1,250 @@
+MONGO-NODEJS CONNECTION
+
+ramasamyfullstack@gmail.om
+
+
+
+
+in termial,
+
+  npm i mongoose
+
+  npm i mongodb (deprecated)
+
+
+create .env file
+
+.env
+
+PORT = 5000
+MONGODBURL = "mongodb://localhost:27017/employeesDB"
+
+
+how to use it, 
+
+   require('dotenv').config()
+
+   process.env.PORT
+
+
+npm i -g nodemon
+
+npm i -D nodemon
+
+npx nodemon index.js
+
+----------------
+
+db.js
+
+const mongoose = require("mongoose");
+require('dotenv').config()
+
+const connectToMongoDB = () =>{
+    try{
+        mongoose.connect(process.env.MONGO_DB_URL);
+        console.log('Connect to mongoDB successfully!!!');
+    }
+    catch(e){
+        console.log(e.message);        
+    }    
+}
+
+module.exports = { connectToMongoDB };
+
+
+---------------------
+
+create models folder and create employee-models.js file
+
+employee-models.js file
+
+
+const mongoose = require('mongoose');
+const Schema = require('mongoose').Schema;
+const conn = require('../db');
+
+conn.connectToMongoDB();
+
+const employeeSchema = new Schema({
+    name: {
+        type: String,
+        required: [true, "Please enter the Trainee Name"]
+    },
+    email: {
+        type: String,
+        required: [true, "Please enter the Trainee Email"]
+    },
+    batch: {
+        type: String,
+        enum: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    },
+    timings: {
+        type: String
+    },
+    year: {
+        type: Number
+    },
+    age: {
+        type: Number,
+        min: [18, "Age must be over 18 years!"],
+        max: [45, "Age must be below 45 years!"]
+    },
+    createdDate: {
+        type: Date,
+        default: Date.now()
+    }
+});
+
+const EmployeeCollection = mongoose.model("trainees", employeeSchema);
+
+module.exports = EmployeeCollection;
+
+------------------------------
+
+create controllers folder and create employee-controllers.js
+
+employee-controllers.js
+
+const TraineesModel = require('../models/trainees-model');
+
+// Read all Trainees
+function readAllTrainees(req, res) {
+    try {
+        TraineesModel.find({})
+            .then(trainees => {
+                res.json(trainees);
+            })
+    } catch (err) {
+        res.json(err.message);
+    }
+}
+// readAllTrainees();
+
+// Read specific Trainee by Name/Email
+function readTrainee(req, res) {
+    try {
+        let {name, email} = req.body;
+
+        TraineesModel.find({"name": name, "email": email})
+            .then(trainees => {
+                (trainees.length > 0) 
+                    ? 
+                    res.json(trainees)
+                    :
+                    res.json("No Trainees found!!!");
+            })
+    } catch (err) {
+        res.json(err.message);
+    }
+}
+// readTrainee("Tony", "tony@gmail.com");
+
+// Add a new Trainee
+async function addTrainee(req, res) {
+
+    const Trainee = new TraineesModel(req.body);
+
+    try {
+        let traineeExists = await TraineesModel.find({"email": req.body.email});
+
+        (traineeExists.length > 0)
+            ?
+            res.json("Trainee Already Exists!")
+            :
+            (await Trainee.save(), res.json("Trainee Added Successfully!"));
+    } catch(err) {
+        let errorList = [];
+        if(err.errors) {
+            for(let temp in err.errors) {
+                errorList.push(err.errors[temp].message)
+            }
+        }
+        res.json(errorList);
+    }
+}
+// addTrainee("Raju", "raju@gmail.com", "January", "2023", "7-9pm");
+
+// Update a specific Trainee
+function updateTrainee(req, res) {
+    try {
+        TraineesModel.updateOne({"email": req.body.email}, {$set: req.body})
+            .then(results => {
+                (results.modifiedCount > 0)
+                    ?
+                    res.json("Trainee Updated Successfully!")
+                    :
+                    res.json("Unable to update the Trainee!");
+            })
+    } catch (err) {
+        res.json(err.message);
+    }
+}
+// updateTrainee("Dinesh", "srinanoo@gmail.com", "January", 2023, "7-9pm");
+
+// Delete a specific Trainee
+function deleteTrainee(req, res) {
+    try {
+        TraineesModel.deleteOne({"email": req.body.email})
+            .then(results => {
+                (results.deletedCount > 0)
+                    ?
+                    res.json("Trainee Deleted Successfully!")
+                    :
+                    res.json("Unable to delete the Trainee!");
+            })
+    } catch (err) {
+        res.json(err.message);
+    }
+}
+// deleleteTrainee("raju@gmail.com");
+
+module.exports = {
+    readAllTrainees,
+    readTrainee,
+    addTrainee,
+    updateTrainee,
+    deleteTrainee
+}
+
+------------------------------
+
+
+create routers folder and employee-routers.js file
+
+
+employee-routers.js
+
+
+const router = require('express').Router();
+const TrainerController = require('../controllers/trainee-controller');
+
+// http://localhost:5000/v1/api/trainees/readAllTrainees
+router.get("/readAllTrainees", TrainerController.readAllTrainees);
+
+// http://localhost:5000/v1/api/trainees/readTrainee
+router.get("/readTrainee", TrainerController.readTrainee);
+
+// http://localhost:5000/v1/api/trainees/addTrainee
+router.post("/addTrainee", TrainerController.addTrainee);
+
+// http://localhost:5000/v1/api/trainees/updateTrainee
+router.put("/updateTrainee", TrainerController.updateTrainee);
+
+// http://localhost:5000/v1/api/trainees/deleteTrainee
+router.delete("/deleteTrainee", TrainerController.deleteTrainee);
+
+module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
